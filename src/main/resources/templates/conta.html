@@ -30,7 +30,7 @@
 		    width: 65px;
 		}
 
-		.cliente {
+		.cliente > .cliente-link {
 		    display: flex;
 		    align-items: center;
 		    justify-content: center;
@@ -98,8 +98,10 @@
     <header>
 
         <div class="cliente">
-            <img src="https://i.imgur.com/0gq3dF5.png" alt="Icone de perfil">
-            <h1 th:text="${user.name} + ' ' + ${user.sobrenome}"></h1>
+			<a href="/dados" style="text-decoration: none; color: #fff;" class="cliente-link">
+            	<img src="https://i.imgur.com/0gq3dF5.png" alt="Icone de perfil">
+            	<h1 th:text="${user.name} + ' ' + ${user.sobrenome}"></h1>
+			</a> 
         </div>
 
         <div class="box-saldo">

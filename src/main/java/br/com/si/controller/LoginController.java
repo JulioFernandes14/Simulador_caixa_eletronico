@@ -33,7 +33,7 @@ public class LoginController {
                 session.setAttribute("user", foundUser);
                 return "redirect:/conta";
             } else {
-                model.addAttribute("message", "Email ou senha incorretos.");
+                model.addAttribute("message", "Email ou senha incorreto(s).");
                 return "loginform";
             }
         } catch (Exception e) {
