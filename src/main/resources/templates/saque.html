@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>SI Bank - Saque</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Montserrat", sans-serif;
+        }
+
+        header {
+            background-color: #0038a8;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px;
+        }
+
+        header img {
+            width: 65px;
+        }
+
+        .cliente {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        h1 {
+            font-size: 30px;
+        }
+
+        .box-saldo span{
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        main {
+            width: 100%;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h2 {
+            font-size: 48px;
+            color: #0038a8;
+        }
+
+        form {
+            width: 50%;
+            font-size: 34px;
+        }
+
+        .campo-valor {
+            padding: 20px;
+        }
+
+        .valor {
+            background-color: #0038a8;
+            color: white;
+            padding: 20px;
+            font-size: 34px;
+        }
+
+        .valor > input {
+            background-color: #0038a8;
+            border: 0;
+            text-align: right;
+            color: white;
+        }
+
+        .col-3 {
+            padding: 10px;
+        }
+
+        .numero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .numero, .acao {
+            background-color: #0038a8;
+            color: #fff;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .acao {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 0;
+            width: 110%;
+        }
+
+        .acao img {
+            width: 40px;
+        }
+
+        .box-valor-transferencia {
+            font-size: 28px;
+            color: #0038a8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+		
+		.cancelar {
+			color:white;
+			text-decoration:none;
+		}
+		
+    </style>
+
+</head>
+<body>
+
+    <header>
+        <div class="cliente">
+            <img src="https://i.imgur.com/0gq3dF5.png" alt="Icone de perfil">
+			<h1 th:text="${user.name} + ' ' + ${user.sobrenome}"></h1>
+        </div>
+
+        <div class="box-saldo">
+            <span class="saldo">Saldo: R$</span>
+			<span th:text="${user.getConta().getSaldo()}"></span> 
+        </div>
+    </header>
+
+    <main>
+
+        <h2>Digite o valor para saque</h2>
+
+        <form class="row" th:action="@{/sacar}" method="post">
+            <div class="col-12 campo-valor">
+                <div class="col-9 valor row">
+                    <span class="moeda col-2">R$</span>
+                    <input id="valor" type="number" value="0.00" class="col-10" name="valor" readonly required>
+                </div>
+            </div>
+
+            <div class="teclado col-12 row">
+                
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(1)">1</div></div>
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(2)">2</div></div>
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(3)">3</div></div>
+                <div class="col-3"><button type="button" class="acao"><a href="/conta" class="cancelar"> Cancelar <img src="https://i.imgur.com/x9VkgTu.png" alt=""> </a> </button></div>
+
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(4)">4</div></div>
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(5)">5</div></div>
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(6)">6</div></div>
+                <div class="col-3"><button type="button" class="acao" onclick="limparValor()">Limpar <img src="https://i.imgur.com/3eKzDLt.png" alt=""></button></div>
+
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(7)">7</div></div>
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(8)">8</div></div>
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(9)">9</div></div>
+                <div class="col-3"><button type="submit" class="acao">Confirmar <img src="https://i.imgur.com/PxnVOkf.png" alt=""></button></div>
+
+                <div class="col-3"><div class="numero" onclick="adicionarNumero(0)">0</div></div>
+            </div>
+        </form>
+		
+    </main>
+
+    <script>
+        let valorAtual = '0';
+
+        function adicionarNumero(numero) {
+            
+            if (valorAtual==='0') {
+                valorAtual = numero.toString();
+            }else {
+                valorAtual +=numero.toString();
+            }
+
+            atualizarValor();
+        }
+
+        function atualizarValor() {
+            let valorFormatado = (parseInt(valorAtual) / 100).toFixed(2); // Utiliza ponto
+            document.getElementById('valor').value = valorFormatado;
+        }
+
+        function limparValor() {
+            valorAtual = '0';
+            document.getElementById('valor').value = '0.00';
+        }
+
+    </script>
+
+</body>
+</html>
